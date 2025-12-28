@@ -1,0 +1,57 @@
+[
+  {
+    "id": "dlg_easy_01",
+    "level": "easy",
+    "title": "Ordering restaurant",
+    "sentences": [
+      {
+        "id": "s1",
+        "text": "a table for two, please",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_01.mp3",
+        "tip": "Stress on late"
+      },
+      {
+        "id": "s2",
+        "text": "can we sit by the window.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_02.mp3"
+      },
+      {
+        "id": "s3",
+        "text": "do you have reservation.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_03.mp3"
+      },
+      {
+        "id": "s4",
+        "text": "no we don't.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_04.mp3"
+      },
+      {
+        "id": "s5",
+        "text": "nhow long is the wait ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_05.mp3"
+      },
+      {
+        "id": "s6",
+        "text": "is this table available ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_06.mp3"
+      },
+      {
+        "id": "s6",
+        "text": "can we have a high chair for a children ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_07.mp3"
+      }
+    ]
+  },
+  {
+    "id": "dlg_mid_01",
+    "level": "middle",
+    "title": "Daily Schedule",
+    "sentences": [
+      {
+        "id": "s1",
+        "text": "My schedule is pretty tight today.",
+        "audio": "middle/schedule_tight.mp3"
+      }
+    ]
+  }
+]
