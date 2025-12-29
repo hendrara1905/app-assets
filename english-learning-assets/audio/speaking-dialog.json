@@ -52,12 +52,37 @@
   {
     "id": "dlg_mid_01",
     "level": "middle",
-    "title": "Daily Schedule",
+    "title": "The Power to Reinvent Yourself",
     "sentences": [
       {
         "id": "s1",
-        "text": "My schedule is pretty tight today.",
-        "audio": "middle/schedule_tight.mp3"
+        "text": "Here's a gentle reminder you can rise above  everything you can recreate yourself nothing  is permanent.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/middle/the_power_to_reinvent_yourself/tpry_01.mp3",
+        "tip":"Ini pengingat lembut bahwa Anda bisa mengatasi segalanya, Anda bisa menciptakan diri Anda kembali, tidak ada yang abadi."
+      },
+      {
+        "id": "s2",
+        "text": "You are not stuck you have choices you can think new  thoughts learn something new and create new habits.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/middle/the_power_to_reinvent_yourself/tpry_02.mp3",
+        "tip":"Kamu tidak terjebak, kamu punya pilihan, kamu bisa berpikir baru, mempelajari sesuatu yang baru, dan menciptakan kebiasaan baru."
+      },
+      {
+        "id": "s3",
+        "text": "Remember you can overcome anything you have the power to reinvent yourself  you have the power to reinvent yourself nothing  lasts forever.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/middle/the_power_to_reinvent_yourself/tpry_03.mp3",
+        "tip":"Ingatlah, kamu bisa mengatasi apa pun. Kamu memiliki kekuatan untuk mengubah dirimu sendiri. Tidak ada yang abadi."
+      },
+      {
+        "id": "s4",
+        "text": "You're not trapped you have options you can change your mindset gain new knowledge  and develop new habits.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/middle/the_power_to_reinvent_yourself/tpry_04.mp3",
+        "tip":"Kamu tidak terjebak, kamu punya pilihan, kamu bisa mengubah pola pikirmu, memperoleh pengetahuan baru, dan mengembangkan kebiasaan baru."
+      },
+      {
+        "id": "s5",
+        "text": "All that matters is that you make a decision  today and never look back don't dwell on the past. Keep Moving forward.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/middle/the_power_to_reinvent_yourself/tpry_05.mp3",
+        "tip":"Yang terpenting adalah Anda membuat keputusan hari ini dan jangan pernah menoleh ke belakang, jangan terpaku pada masa lalu. Teruslah bergerak maju."
       }
     ]
   },
