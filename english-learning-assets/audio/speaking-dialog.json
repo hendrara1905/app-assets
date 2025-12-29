@@ -6,39 +6,46 @@
     "sentences": [
       {
         "id": "s1",
-        "text": "a table for two, please",
+        "text": "A table for two, please",
         "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_01.mp3",
-        "tip": "Stress on late"
+        "tip": "Tolong pesan meja untuk dua orang."
       },
       {
         "id": "s2",
-        "text": "can we sit by the window.",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_02.mp3"
+        "text": "Can we sit by the window.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_02.mp3",
+        "tip": "Bisakah kita duduk di dekat jendela ?"
+        
       },
       {
         "id": "s3",
-        "text": "do you have reservation.",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_03.mp3"
+        "text": "Do you have reservation.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_03.mp3",
+        "tip" : "Apakah Anda sudah reservasi?"
       },
       {
         "id": "s4",
-        "text": "no we don't.",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_04.mp3"
+        "text": "No we don't.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_04.mp3",
+        "tip": "Kami tidak melakukannya"
       },
       {
         "id": "s5",
-        "text": "nhow long is the wait ?",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_05.mp3"
+        "text": "How long is the wait ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_05.mp3",
+        "tip": "Berapa lama waktu tunggunya ?"
       },
       {
         "id": "s6",
-        "text": "is this table available ?",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_06.mp3"
+        "text": "Is this table available ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_06.mp3",
+        "tip":"Apakah meja ini tersedia ?"
       },
       {
         "id": "s6",
-        "text": "can we have a high chair for a children ?",
-        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_07.mp3"
+        "text": "Can we have a high chair for a children ?",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/easy/dialog_001/order_restaurant_07.mp3",
+        "tip":"Bisakah kami mendapatkan kursi tinggi untuk anak-anak ?"
       }
     ]
   },
