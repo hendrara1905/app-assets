@@ -60,5 +60,36 @@
         "audio": "middle/schedule_tight.mp3"
       }
     ]
+  },
+  {
+    "id": "dlg_hard_01",
+    "level": "hard",
+    "title": "A Strange Noise Upstairs",
+    "sentences": [
+      {
+        "id": "s1",
+        "text": "The other night, Will and I were, sitting down to dinner when we heard a thump above our heads.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/hard/a_strange_noise_upstairs/snu_01.mp3",
+        "tip" : "Suatu malam, saat Will dan aku sedang makan malam, kami mendengar suara gedebuk di atas kepala kami." 
+      },
+      {
+        "id": "s2",
+        "text": "We live in an old house, so we just shrugged it off and started eating. There was another loud thud and then what sounds like footsteps !",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/hard/a_strange_noise_upstairs/snu_02.mp3",
+        "tip" : "Kami tinggal di rumah tua, jadi kami hanya mengabaikannya dan mulai makan. Terdengar lagi suara dentuman yang lebih keras dan kemudian seperti langkah kaki!"
+      },
+      {
+        "id": "s3",
+        "text": "I am not joking when I tell you the hairs on my arms stood on end. Even Will looked a bit shaken, which is not like him at all. He called our dog, Diego, for company and went upstairs to investigate.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/hard/a_strange_noise_upstairs/snu_03.mp3",
+        "tip" : "Aku tidak bercanda ketika kukatakan bulu kudukku merinding. Bahkan Will terlihat sedikit terkejut, padahal biasanya dia tidak seperti itu. Dia memanggil anjing kami, Diego, untuk menemaninya dan naik ke atas untuk menyelidiki."
+      },
+      {
+        "id": "s4",
+        "text": "Moments later, Diego came bounding down the stairs with a tennis ball in his mouth. What do you know? A bunch of tennis balls’d fallen off the top of the wardrobe and rolled down the landing.",
+        "audio": "https://cdn.jsdelivr.net/gh/hendrara1905/app-assets@main/english-learning-assets/audio/hard/a_strange_noise_upstairs/snu_04.mp3",
+        "tip" : "Beberapa saat kemudian, Diego berlari menuruni tangga dengan bola tenis di mulutnya. Dan benar saja, banyak bola tenis jatuh dari atas lemari dan menggelinding ke bawah."
+      }
+    ]
   }
 ]
