@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasir Warung Kademangan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F7F3EE; --surface: #FFFFFF; --ink: #1C1712;
+    --gold: #B8732A; --gold-light: #F5E8D5; --gold-border: #D4963E;
+    --muted: #8A7F74; --danger: #C0392B; --danger-light: #FDECEA; --border: #E2D9CE;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+
+  header { background: var(--ink); padding: 18px 32px; display: flex; align-items: center; gap: 14px; border-bottom: 3px solid var(--gold); }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 20px; color: #F5E8D5; }
+  .sub { display: block; font-size: 10px; color: var(--gold-border); letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-top: 2px; }
+
+  .layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; max-width: 1100px; margin: 0 auto; padding: 28px 24px; }
+  .card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .card-header { background: var(--ink); color: #F5E8D5; padding: 11px 16px; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; }
+  .card-header.gold { background: var(--gold); }
+  .card-body { padding: 16px; }
+
+  .tabs { display: flex; border-bottom: 2px solid var(--border); }
+  .tab { padding: 10px 16px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .15s; }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .menu-add { display: flex; gap: 8px; margin-bottom: 12px; }
+  .menu-add input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--bg); outline: none; color: var(--ink); }
+  .menu-add input:focus { border-color: var(--gold-border); }
+  .btn-add { padding: 8px 14px; background: var(--gold); color: white; border: none; border-radius: 3px; font-size: 18px; cursor: pointer; }
+  .btn-add:hover { background: var(--ink); }
+
+  .menu-tags { display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow-y: auto; }
+  .tag { display: inline-flex; align-items: center; gap: 5px; background: var(--gold-light); border: 1px solid var(--gold-border); border-radius: 20px; padding: 4px 10px 4px 12px; font-size: 12.5px; }
+  .tag-remove { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 15px; line-height: 1; padding: 0; }
+  .tag-remove:hover { color: var(--danger); }
+
+  .harga-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .harga-row:last-child { border-bottom: none; }
+  .harga-name { font-size: 13.5px; }
+  .harga-input-wrap { display: flex; align-items: center; gap: 4px; }
+  .harga-prefix { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .harga-input { width: 120px; padding: 5px 8px; border: 1.5px solid var(--border); border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 12px; text-align: right; outline: none; color: var(--ink); }
+  .harga-input:focus { border-color: var(--gold-border); }
+
+  .order-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; line-height: 1.6; }
+  code { background: var(--gold-light); padding: 1px 5px; border-radius: 2px; font-family: 'DM Mono', monospace; }
+  textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 3px; font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.7; resize: vertical; background: var(--bg); color: var(--ink); outline: none; }
+  textarea:focus { border-color: var(--gold-border); }
+  .btn-parse { width: 100%; margin-top: 10px; padding: 12px; background: var(--ink); color: #F5E8D5; border: none; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s; }
+  .btn-parse:hover { background: var(--gold); }
+
+  .rekap-table { width: 100%; border-collapse: collapse; }
+  .rekap-table th { padding: 9px 14px; text-align: left; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; color: var(--muted); background: var(--gold-light); border-bottom: 1.5px solid var(--gold-border); }
+  .rekap-table th:nth-child(2) { text-align: center; }
+  .rekap-table th:nth-child(3) { text-align: right; }
+  .rekap-table td { padding: 10px 14px; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .rekap-table td:nth-child(2) { text-align: center; }
+  .rekap-table td:nth-child(3) { text-align: right; font-family: 'DM Mono', monospace; font-size: 13px; }
+  .rekap-table tbody tr:hover td { background: var(--gold-light); }
+  .qty-badge { display: inline-block; background: var(--ink); color: #F5E8D5; border-radius: 20px; padding: 2px 12px; font-size: 13px; font-weight: 600; min-width: 32px; text-align: center; }
+  .total-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 14px; background: var(--ink); color: #F5E8D5; }
+  .total-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .total-value { font-family: 'DM Mono', monospace; font-size: 18px; color: var(--gold-border); font-weight: 700; }
+
+  .unknown-box { margin-top: 16px; border: 1.5px solid var(--danger); border-radius: 4px; overflow: hidden; }
+  .unknown-header { background: var(--danger); color: white; padding: 9px 14px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .unknown-list { background: var(--danger-light); padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .unknown-tag { background: white; border: 1px solid var(--danger); border-radius: 20px; padding: 3px 12px; font-size: 12.5px; color: var(--danger); font-weight: 500; }
+
+  .empty-state { padding: 50px 20px; text-align: center; color: var(--muted); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 13.5px; line-height: 1.6; }
+  .btn-reset { display: block; width: calc(100% - 28px); margin: 8px 14px 14px; padding: 8px; background: transparent; border: 1.5px solid var(--border); border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .btn-reset:hover { border-color: var(--danger); color: var(--danger); }
+  .btn-export { display: block; width: calc(100% - 28px); margin: 12px 14px 0; padding: 9px; background: #1D6F42; color: white; border: none; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: 0.3px; transition: background .15s; }
+  .btn-export:hover { background: #155233; }
+  .no-menu { text-align: center; color: var(--muted); font-size: 13px; padding: 20px; }
+
+  @media (max-width: 720px) { .layout { grid-template-columns: 1fr; padding: 16px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:26px">🍽️</span>
+  <div>
+    <h1>Warung Kademangan <span class="sub">Order Parser — Pure Local</span></h1>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Kiri -->
+  <div style="display:flex;flex-direction:column;gap:20px;">
+
+    <div class="card">
+      <div class="card-header">📋 Kelola Menu</div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('menu')">Daftar Menu</div>
+        <div class="tab" onclick="switchTab('harga')">Harga</div>
+      </div>
+
+      <div class="tab-panel active" id="tab-menu">
+        <div class="card-body">
+          <div class="menu-add">
+            <input id="newMenuItem" type="text" placeholder="Nama menu baru..." onkeydown="if(event.key==='Enter')addMenu()">
+            <button class="btn-add" onclick="addMenu()">+</button>
+          </div>
+          <div class="menu-tags" id="menuTags"></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-harga">
+        <div class="card-body" style="max-height:280px;overflow-y:auto;">
+          <div id="hargaList"></div>
+          <div id="noMenuMsg" class="no-menu" style="display:none">Belum ada menu.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📝 Input Orderan</div>
+      <div class="card-body">
+        <p class="order-hint">
+          Tiap item satu baris, format bebas:<br>
+          <code>1 nasi putih</code> &nbsp; <code>ayam goreng 2</code> &nbsp; <code>tahu</code>
+        </p>
+        <textarea id="orderInput" rows="10"
+          placeholder="Contoh:&#10;1 nasi putih&#10;ayam goreng 2&#10;3 es teh&#10;tempe&#10;tahu 2&#10;jus alpukat"></textarea>
+        <button class="btn-parse" onclick="parseOrder()">🔍 Parse &amp; Rekap</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Kanan -->
+  <div style="position:sticky;top:24px;align-self:start;">
+    <div class="card">
+      <div class="card-header gold">🧾 Rekap Order</div>
+      <div id="rekapContent">
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <p>Rekap order akan tampil di sini<br>setelah kamu klik Parse.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────────────
+  let menuList = [
+    // SANGU
+    "Nasi Putih","Nasi Liwet","Nasi Tutug Oncom","Nasi Tutug Rangginang","Nasi Kasreng",
+    // RENCANG SANGU
+    "Ayam Bakar","Ayam Goreng","Ikan Bakar Nila","Lumpia","Telur Dadar","Kulit Goreng",
+    // GORENGAN
+    "Tahu","Tempe","Oncom Dayut","Oncom Cigaleuh","Bakwan Jagung",
+    // ASIN
+    "Tim Asin Peda","Peda Beureum (Goreng)","Cumi (Goreng)","Jambal Roti (Goreng)",
+    "Sepat (Goreng)","Pe Lalay (Goreng)","Bolocot (Goreng)","Japuh (Goreng/Bakar)",
+    "Tanjan (Goreng/Bakar)","Peda Buntung (Goreng/Bakar)",
+    // PEUTEUY / JENGKOL
+    "Jengkol Goreng","Peuteuy Goreng / Bakar","Jengkol Kecap",
+    // MENU ANAK
+    "Paket Bento","Paket Katsu",
+    // SAYURAN
+    "Kol Goreng","Terong Goreng","Saladaer Goreng","Tumis Kangkung","Sayur Asem","Karedok Sayur",
+    // SAMBEL / PENCOK
+    "Sambel Dadak","Sambel Goang","Pencok Katel","Pencok Kacang","Pencok Leunca",
+    // MINUMAN DINGIN
+    "Es Teh Manis","Es Lemon","Es Lemon Tea","Es Coklat","Es Kopi Susu Gula Aren","Es Teh Rempah",
+    // MINUMAN PANAS
+    "Kopi Susu","Kopi Sachet","Coklat Panas","Teh Manis","Lemon Tea","Teh Rempah",
+    // CEMILAN
+    "Peuyeum Goreng","Pisang Goreng","Risol Coklat Keju","Cireng Isi Ayam",
+    "Cireng Isi Jando","Kentang Goreng","Dimsum","Pempek","Cilok Bumbu Kacang"
+  ];
+  let hargaMap = {
+    // SANGU
+    "Nasi Putih": 5000, "Nasi Liwet": 7000, "Nasi Tutug Oncom": 7000,
+    "Nasi Tutug Rangginang": 8000, "Nasi Kasreng": 8000,
+    // RENCANG SANGU
+    "Ayam Bakar": 20000, "Ayam Goreng": 20000, "Ikan Bakar Nila": 20000,
+    "Lumpia": 16000, "Telur Dadar": 6000, "Kulit Goreng": 10000,
+    // GORENGAN
+    "Tahu": 2500, "Tempe": 2500, "Oncom Dayut": 2000, "Oncom Cigaleuh": 2500, "Bakwan Jagung": 3000,
+    // ASIN
+    "Tim Asin Peda": 15000, "Peda Beureum (Goreng)": 10000, "Cumi (Goreng)": 12000,
+    "Jambal Roti (Goreng)": 5000, "Sepat (Goreng)": 10000, "Pe Lalay (Goreng)": 5000,
+    "Bolocot (Goreng)": 5000, "Japuh (Goreng/Bakar)": 5000,
+    "Tanjan (Goreng/Bakar)": 5000, "Peda Buntung (Goreng/Bakar)": 10000,
+    // PEUTEUY / JENGKOL
+    "Jengkol Goreng": 12000, "Peuteuy Goreng / Bakar": 12000, "Jengkol Kecap": 15000,
+    // MENU ANAK
+    "Paket Bento": 21000, "Paket Katsu": 21000,
+    // SAYURAN
+    "Kol Goreng": 5000, "Terong Goreng": 5000, "Saladaer Goreng": 5000,
+    "Tumis Kangkung": 8000, "Sayur Asem": 8000, "Karedok Sayur": 10000,
+    // SAMBEL / PENCOK
+    "Sambel Dadak": 5000, "Sambel Goang": 3000, "Pencok Katel": 8000,
+    "Pencok Kacang": 8000, "Pencok Leunca": 8000,
+    // MINUMAN DINGIN
+    "Es Teh Manis": 5000, "Es Lemon": 10000, "Es Lemon Tea": 8000,
+    "Es Coklat": 12000, "Es Kopi Susu Gula Aren": 15000, "Es Teh Rempah": 10000,
+    // MINUMAN PANAS
+    "Kopi Susu": 8000, "Kopi Sachet": 5000, "Coklat Panas": 12000,
+    "Teh Manis": 5000, "Lemon Tea": 8000, "Teh Rempah": 8000,
+    // CEMILAN
+    "Peuyeum Goreng": 12000, "Pisang Goreng": 10000, "Risol Coklat Keju": 10000,
+    "Cireng Isi Ayam": 12000, "Cireng Isi Jando": 12000, "Kentang Goreng": 10000,
+    "Dimsum": 13000, "Pempek": 18000, "Cilok Bumbu Kacang": 7000
+  };
+  let lastRekapData = { items: [], unknowns: [] };
+
+  // ── Utils ──────────────────────────────────────────────────
+  function formatRp(n) {
+    return n > 0 ? "Rp\u00a0" + n.toLocaleString("id-ID") : "-";
+  }
+
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    const dp = Array.from({length: m+1}, (_, i) =>
+      Array.from({length: n+1}, (_, j) => i === 0 ? j : j === 0 ? i : 0)
+    );
+    for (let i = 1; i <= m; i++)
+      for (let j = 1; j <= n; j++)
+        dp[i][j] = a[i-1] === b[j-1]
+          ? dp[i-1][j-1]
+          : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    return dp[m][n];
+  }
+
+  function scoreSimilarity(raw, menu) {
+    const a = raw.toLowerCase().trim();
+    const b = menu.toLowerCase().trim();
+
+    // exact match
+    if (a === b) return 1.0;
+
+    // input adalah substring penuh dari menu atau sebaliknya
+    // tapi SEMUA kata input harus ada di menu (bukan cuma 1 kata)
+    const wa = a.split(/\s+/);
+    const wb = b.split(/\s+/);
+
+    // Semua kata input cocok ke menu → kemungkinan singkatan
+    const allInputMatched = wa.every(w => wb.some(m => m === w || m.startsWith(w) || w.startsWith(m)));
+    if (allInputMatched) return 0.92;
+
+    // Semua kata menu cocok ke input (input lebih panjang tapi mengandung menu)
+    const allMenuMatched = wb.every(w => wa.some(m => m === w || m.startsWith(w) || w.startsWith(m)));
+    if (allMenuMatched) return 0.88;
+
+    // Hitung berapa kata yang benar-benar sama persis
+    const exactMatched = wa.filter(w => wb.includes(w));
+    // Hanya beri skor tinggi kalau mayoritas kata cocok
+    const ratio = exactMatched.length / Math.max(wa.length, wb.length);
+    if (ratio >= 0.75) return 0.7 + ratio * 0.15;
+
+    // fallback levenshtein — hanya untuk typo (string pendek & mirip)
+    if (Math.abs(a.length - b.length) <= 3) {
+      const dist = levenshtein(a, b);
+      const lvScore = Math.max(0, 1 - dist / Math.max(a.length, b.length));
+      if (lvScore >= 0.80) return lvScore * 0.85;
+    }
+
+    return 0;
+  }
+
+  function matchToMenu(raw) {
+    if (!menuList.length) return null;
+    let best = null, bestScore = 0;
+    for (const m of menuList) {
+      const s = scoreSimilarity(raw, m);
+      if (s > bestScore) { bestScore = s; best = m; }
+    }
+    // threshold dinaikkan ke 0.75 agar tidak false-positive
+    return bestScore >= 0.75 ? best : null;
+  }
+
+  // ── Parser ─────────────────────────────────────────────────
+  function parseOrder() {
+    const text = document.getElementById("orderInput").value.trim();
+    if (!text) return;
+
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const known = {};
+    const unknowns = [];
+
+    for (const line of lines) {
+      let qty = 1, rawName = line;
+
+      const front = line.match(/^(\d+)\s+(.+)$/);
+      const back  = line.match(/^(.+?)\s+(\d+)$/);
+
+      if (front) {
+        qty     = parseInt(front[1]);
+        rawName = front[2].trim();
+      } else if (back) {
+        qty     = parseInt(back[2]);
+        rawName = back[1].trim();
+      }
+
+      const matched = matchToMenu(rawName);
+      if (matched) {
+        known[matched] = (known[matched] || 0) + qty;
+      } else {
+        unknowns.push(rawName + (qty > 1 ? ` (\xd7${qty})` : ""));
+      }
+    }
+
+    renderRekap(
+      Object.entries(known).map(([nama, qty]) => ({ nama, qty })),
+      unknowns
+    );
+  }
+
+  // ── Render Rekap ───────────────────────────────────────────
+  function renderRekap(items, unknowns) {
+    lastRekapData = { items, unknowns };
+    let totalHarga = 0, adaHarga = false;
+
+    const rows = items.map(({ nama, qty }) => {
+      const h = hargaMap[nama] || 0;
+      const sub = h * qty;
+      if (h > 0) { adaHarga = true; totalHarga += sub; }
+      return `<tr>
+        <td>${nama}</td>
+        <td><span class="qty-badge">${qty}</span></td>
+        <td>${h > 0 ? formatRp(sub) : '<span style="color:#ccc;font-size:12px">-</span>'}</td>
+      </tr>`;
+    }).join("");
+
+    const totalQty = items.reduce((a, b) => a + b.qty, 0);
+
+    const totalRow = adaHarga
+      ? `<div class="total-row"><span class="total-label">Total Harga</span><span class="total-value">${formatRp(totalHarga)}</span></div>`
+      : `<div class="total-row"><span class="total-label">Total Item</span><span class="total-value" style="font-size:16px">${totalQty} pcs</span></div>`;
+
+    const unknownBox = unknowns.length ? `
+      <div class="unknown-box">
+        <div class="unknown-header">\u26a0\ufe0f Tidak Ada di Menu &mdash; ${unknowns.length} item</div>
+        <div class="unknown-list">${unknowns.map(u => `<span class="unknown-tag">${u}</span>`).join("")}</div>
+      </div>` : "";
+
+    const emptyRows = !rows
+      ? `<tr><td colspan="3" style="text-align:center;color:#bbb;padding:24px;font-size:13px">Tidak ada item yang cocok dengan menu.</td></tr>`
+      : "";
+
+    document.getElementById("rekapContent").innerHTML = `
+      <table class="rekap-table">
+        <thead><tr><th>Menu</th><th>Qty</th><th>Subtotal</th></tr></thead>
+        <tbody>${rows || emptyRows}</tbody>
+      </table>
+      ${totalRow}
+      <div style="padding:0 14px">${unknownBox}
+        <button class="btn-export" onclick="exportExcel()">⬇️ Export ke Excel</button>
+        <button class="btn-reset" onclick="resetRekap()">↺ Reset</button>
+      </div>`;
+  }
+
+  function resetRekap() {
+    document.getElementById("orderInput").value = "";
+    document.getElementById("rekapContent").innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📋</div>
+        <p>Rekap order akan tampil di sini<br>setelah kamu klik Parse.</p>
+      </div>`;
+  }
+
+  // ── Export Excel ───────────────────────────────────────────
+  function exportExcel() {
+    const { items, unknowns } = lastRekapData;
+    const wb = XLSX.utils.book_new();
+
+    // Sheet 1: Rekap Order
+    let totalHarga = 0;
+    const rekapRows = [["Menu", "Qty", "Harga Satuan", "Subtotal"]];
+    items.forEach(({ nama, qty }) => {
+      const h = hargaMap[nama] || 0;
+      const sub = h * qty;
+      totalHarga += sub;
+      rekapRows.push([nama, qty, h || "", sub || ""]);
+    });
+    rekapRows.push([]); // spacer
+    if (totalHarga > 0) rekapRows.push(["", "", "TOTAL", totalHarga]);
+
+    const ws1 = XLSX.utils.aoa_to_sheet(rekapRows);
+    // Lebar kolom
+    ws1["!cols"] = [{ wch: 24 }, { wch: 8 }, { wch: 16 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, ws1, "Rekap Order");
+
+    // Sheet 2: Tidak Dikenal (jika ada)
+    if (unknowns.length) {
+      const ws2 = XLSX.utils.aoa_to_sheet([
+        ["Item Tidak Dikenal"],
+        ...unknowns.map(u => [u])
+      ]);
+      ws2["!cols"] = [{ wch: 30 }];
+      XLSX.utils.book_append_sheet(wb, ws2, "Tidak Dikenal");
+    }
+
+    // Nama file pakai tanggal
+    const now = new Date();
+    const tgl = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}`;
+    XLSX.writeFile(wb, `rekap-order-${tgl}.xlsx`);
+  }
+
+  // ── Menu & Harga ───────────────────────────────────────────
+  function renderMenuTags() {
+    const wrap = document.getElementById("menuTags");
+    wrap.innerHTML = menuList.length
+      ? menuList.map(item => `
+          <span class="tag">${item}
+            <button class="tag-remove" onclick="removeMenu(${JSON.stringify(item)})">×</button>
+          </span>`).join("")
+      : '<span style="color:#aaa;font-size:13px">Belum ada menu.</span>';
+  }
+
+  function renderHargaList() {
+    const wrap  = document.getElementById("hargaList");
+    const noMsg = document.getElementById("noMenuMsg");
+    if (!menuList.length) { wrap.innerHTML = ""; noMsg.style.display = "block"; return; }
+    noMsg.style.display = "none";
+    wrap.innerHTML = menuList.map(item => `
+      <div class="harga-row">
+        <span class="harga-name">${item}</span>
+        <div class="harga-input-wrap">
+          <span class="harga-prefix">Rp</span>
+          <input class="harga-input" type="number" min="0" step="500"
+            placeholder="0" value="${hargaMap[item] || ''}"
+            oninput="hargaMap[${JSON.stringify(item)}] = parseInt(this.value)||0">
+        </div>
+      </div>`).join("");
+  }
+
+  function addMenu() {
+    const inp = document.getElementById("newMenuItem");
+    const val = inp.value.trim();
+    if (val && !menuList.includes(val)) {
+      menuList.push(val);
+      inp.value = "";
+      renderMenuTags();
+      renderHargaList();
+    }
+  }
+
+  function removeMenu(item) {
+    menuList = menuList.filter(m => m !== item);
+    delete hargaMap[item];
+    renderMenuTags();
+    renderHargaList();
+  }
+
+  function switchTab(name) {
+    document.querySelectorAll(".tab").forEach((t, i) =>
+      t.classList.toggle("active", (i===0&&name==="menu")||(i===1&&name==="harga")));
+    document.getElementById("tab-menu").classList.toggle("active", name==="menu");
+    document.getElementById("tab-harga").classList.toggle("active", name==="harga");
+  }
+
+  // Init
+  renderMenuTags();
+  renderHargaList();
+</script>
+</body>
+</html>
